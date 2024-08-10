@@ -1,0 +1,206 @@
+SDG problem definition document 
+
+SDG 4: Quality Education
+Focus Area: Addressing Low Literacy Rates in Rural Areas
+
+Step 1: Problem Identification
+
+The problem you're addressing within SDG 4 is the low literacy rates in rural areas. This issue can be due to various factors, including lack of access to quality education, insufficient resources, and socio-economic barriers.
+
+Step 2: Database Design
+
+Design a database to store relevant data that will help you analyze and address this problem. Below is a suggested schema:
+
+Students:
+StudentID (Primary Key)
+Name
+Age
+Gender
+RegionID (Foreign Key)
+EnrollmentDate
+LiteracyLevel (e.g., Basic, Intermediate, Advanced)
+Schools:
+SchoolID (Primary Key)
+Name
+RegionID (Foreign Key)
+NumberOfTeachers
+ResourcesAvailable (Books, Computers, etc.)
+AverageLiteracyScore
+Regions:
+RegionID (Primary Key)
+Name
+Population
+NumberOfSchools
+AverageIncome
+Teachers:
+TeacherID (Primary Key)
+Name
+SchoolID (Foreign Key)
+Qualification
+ExperienceYears
+SubjectsTaught
+Programs:
+ProgramID (Primary Key)
+Name
+TargetGroup (e.g., Age range)
+Duration
+SchoolID (Foreign Key)
+EffectivenessScore
+Step 3: Data Collection and Entry
+
+Populate the database with real or hypothetical data, such as:
+
+Student literacy levels across different regions.
+Availability of educational resources in rural schools.
+Teacher qualifications and their impact on literacy levels.
+The effectiveness of various educational programs.
+Step 4: Data Analysis
+
+Use data analysis techniques to gain insights into the problem. Here are some questions you might explore:
+
+Regional Disparities: Which rural regions have the lowest literacy rates? What common factors do these regions share (e.g, low number of teachers, lack of resources)?
+Impact of Resources: Is there a correlation between the availability of resources (like books or computers) and literacy levels in students?
+Teacher Influence: How do teacher qualifications and experience affect student literacy rates?
+Program Effectiveness: Which educational programs are most effective in improving literacy rates, and in which regions?
+Step 5: Excel as the User Interface
+
+Create an Excel dashboard to visualize your findings and assist in decision-making:
+
+Pivot Tables: Summarize data by region, school, or literacy level.
+Charts: Display trends such as literacy rates over time, or comparisons between different regions.
+Dashboards: Combine tables, charts, and other Excel features to create an interactive dashboard that highlights key metrics and insights.
+Step 6: Proposed Solution
+
+Based on your analysis, develop a data-driven solution. For instance:
+
+Targeted Resource Allocation: Allocate additional resources (like books or computers) to schools in regions with the lowest literacy rates.
+Teacher Training Programs: Implement professional development programs to improve teacher qualifications and effectiveness in rural areas.
+Program Expansion: Scale up successful educational programs to reach more students in underperforming regions.
+Community Engagement: Work with local communities to address socio-economic barriers that might be hindering education.
+
+PART 3:
+
+Data Analysis: 
+Analyzing literacy levels by Region:
+
+-- SELECT r.Name AS Region, 
+--        COUNT(s.StudentID) AS NumberOfStudents, 
+--        AVG(CASE 
+--              WHEN s.LiteracyLevel = 'Basic' THEN 1 
+--              WHEN s.LiteracyLevel = 'Intermediate' THEN 2 
+--              WHEN s.LiteracyLevel = 'Advanced' THEN 3 
+--              ELSE 0 
+--            END) AS AverageLiteracyScore
+-- FROM Students s
+-- JOIN Regions r ON s.RegionID = r.RegionID
+-- GROUP BY r.Name
+-- ORDER BY AverageLiteracyScore DESC
+-- LIMIT 0, 1000;
+
+
+Corrolation between resources available and literacy:
+
+SELECT sc.Name AS School, 
+       sc.ResourcesAvailable, 
+       sc.AverageLiteracyScore
+FROM Schools sc
+ORDER BY sc.AverageLiteracyScore DESC
+LIMIT 0, 1000;
+
+
+Teacher Qualification and literacy levels:
+
+SELECT t.Name AS Teacher, 
+       t.Qualification, 
+       sc.Name AS School, 
+       sc.AverageLiteracyScore
+FROM Teachers t
+JOIN Schools sc ON t.SchoolID = sc.SchoolID
+ORDER BY sc.AverageLiteracyScore DESC
+LIMIT 0, 1000;
+
+
+Effectiveness and Educational programs:
+
+SELECT p.Name AS Program, 
+       p.EffectivenessScore, 
+       sc.Name AS School, 
+       sc.AverageLiteracyScore
+FROM Programs p
+JOIN Schools sc ON p.SchoolID = sc.SchoolID
+ORDER BY p.EffectivenessScore DESC
+LIMIT 0, 1000;
+
+
+
+Identifying Underperforming regions:
+
+SELECT r.Name AS Region, 
+       AVG(sc.AverageLiteracyScore) AS RegionAverageLiteracyScore 
+FROM Schools sc
+JOIN Regions r ON sc.RegionID = r.RegionID
+GROUP BY r.Name
+ORDER BY RegionAverageLiteracyScore ASC
+LIMIT 0, 1000;
+
+
+
+
+
+                 Interpretation of visualization:
+
+1. Average Literacy Score by Region 
+This chart visualizes the average literacy scores across different regions.
+
+Key Insights:
+
+High-Performing Regions: Regions with higher average literacy scores indicate areas where education systems are relatively effective. These regions likely have better access to resources, more qualified teachers, or effective educational programs.
+Low-Performing Regions: Regions with lower average literacy scores are areas of concern. These regions may suffer from inadequate resources, poor infrastructure, or socio-economic challenges that impact education.
+Interpretation:
+
+Targeted Interventions Needed: The regions with lower scores should be prioritized for interventions. This could include allocating more educational resources, implementing specialized programs, or providing additional teacher training.
+Successful Models: The high-performing regions can serve as models. Understanding what works well in these regions (e.g., community engagement, government support, specific educational programs) can help replicate success in other areas.
+Resource Availability vs. Literacy Score (Scatter Plot)
+This scatter plot helps you visualize the relationship between the availability of resources (like books, computers, and labs) and the average literacy scores in schools.
+
+Key Insights:
+
+Positive Correlation: If the plot shows a trend where schools with more resources tend to have higher literacy scores, it suggests that increasing resource availability can directly impact literacy outcomes.
+Outliers: Look for any schools that have high resources but low literacy scores, or low resources but high literacy scores. These outliers may indicate other influencing factors like teacher quality, student socio-economic background, or the effectiveness of educational programs.
+Interpretation:
+
+Invest in Resources: If a strong positive correlation is evident, it underscores the importance of investing in educational resources to improve literacy rates. Schools with fewer resources should be prioritized for additional support.
+Further Investigation: Outliers should be further investigated to understand the unique challenges or strengths that contribute to their performance.
+3. Effectiveness of Programs (Bar Chart)
+This chart shows the effectiveness scores of various educational programs across different schools.
+
+Key Insights:
+
+High-Impact Programs: Programs with higher effectiveness scores are contributing positively to literacy improvements. These programs are worth expanding or replicating in other schools or regions.
+Less Effective Programs: Programs with lower effectiveness scores might be underperforming. They may need to be re-evaluated, with possible adjustments to their content, delivery method, or target audience.
+Interpretation:
+
+Program Expansion: High-impact programs should be scaled up and implemented in more schools, particularly those in low-performing regions.
+Program Reevaluation: Less effective programs need to be examined closely to identify why they aren't yielding the desired results. It may be necessary to make changes to the program structure or to replace them with more successful alternatives.
+4. Pivot Tables with Slicers
+The PivotTables, combined with Slicers, allow you to dynamically filter and explore data based on different dimensions like gender, age, or region.
+
+Key Insights:
+
+Customized Views: You can use Slicers to see how specific factors (e.g., gender or age) impact literacy scores. This can help identify if certain demographics are being underserved.
+Detailed Analysis: By drilling down into specific regions or schools, you can gain a more nuanced understanding of the challenges and successes in different areas.
+Interpretation:
+
+Demographic-Specific Interventions: If the data shows that certain groups (e.g., female students or younger students) have consistently lower literacy scores, targeted interventions should be designed to address these gaps.
+Regional Focus: Use the filtered views to tailor interventions to the specific needs of each region, ensuring that strategies are as effective as possible.
+
+
+
+
+Explanation of the ERD:
+Explanation of Relationships between the variable:
+
+Region to School: A region can have multiple schools, representing different geographical areas.
+School to Student: Each school can have multiple students, capturing the educational environment for each student.
+School to Teacher: Schools employ multiple teachers, impacting the quality of education.
+School to Program: Schools can run various programs to enhance education, each with its effectiveness score.
