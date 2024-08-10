@@ -1,0 +1,21 @@
+Connecting Excel to MySQL Database
+1.1. Install MySQL ODBC Driver (if needed)
+
+To connect Excel to MySQL, you might need the MySQL ODBC driver:
+
+Download it from the MySQL website.
+Install the driver, following the instructions for your operating system.
+1.2. Open Excel and Set Up the Connection
+
+Open Excel and create a new workbook.
+Go to the Data tab, and select Get Data > From Other Sources > From ODBC.
+In the ODBC Data Source dialog, choose the MySQL ODBC driver you installed and set up earlier.
+Click OK and enter your MySQL server details:
+Server: localhost (or the IP address of your MySQL server)
+Database: sdg4_education
+Username: root
+Password: (your MySQL root password)
+Once connected, Excel will prompt you to select the tables you want to import. Start with the relevant tables like Regions, Schools, Students, and Programs.
+2: Import Data into Excel
+Select the Tables: Choose Regions, Schools, Students, and Programs.
+Load the Data: Click Load to import the data into Excel. Each table will appear on a separate sheet.
