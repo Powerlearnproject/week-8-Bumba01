@@ -1,0 +1,142 @@
+-- Create Database
+CREATE DATABASE sdg4_education;
+USE sdg4_education;
+
+-- Create Regions Table
+CREATE TABLE Regions (
+    RegionID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Population INT,
+    NumberOfSchools INT,
+    AverageIncome DECIMAL(10, 2)
+);
+
+-- Create Schools Table
+CREATE TABLE Schools (
+    SchoolID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    RegionID INT,
+    NumberOfTeachers INT,
+    ResourcesAvailable TEXT,
+    AverageLiteracyScore DECIMAL(5, 2),
+    FOREIGN KEY (RegionID) REFERENCES Regions(RegionID)
+);
+
+-- Create Students Table
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Age INT,
+    Gender ENUM('Male', 'Female', 'Other'),
+    RegionID INT,
+    EnrollmentDate DATE,
+    LiteracyLevel ENUM('Basic', 'Intermediate', 'Advanced'),
+    FOREIGN KEY (RegionID) REFERENCES Regions(RegionID)
+);
+
+-- Create Teachers Table
+CREATE TABLE Teachers (
+    TeacherID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    SchoolID INT,
+    Qualification VARCHAR(100),
+    ExperienceYears INT,
+    SubjectsTaught TEXT,
+    FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+-- Create Programs Table
+CREATE TABLE Programs (
+    ProgramID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    TargetGroup VARCHAR(50),
+    Duration INT,
+    SchoolID INT,
+    EffectivenessScore DECIMAL(5, 2),
+    FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+);
+
+
+
+
+
+PART 3:
+
+Data Analysis: 
+Analyzing literacy levels by Region:
+
+-- SELECT r.Name AS Region, 
+--        COUNT(s.StudentID) AS NumberOfStudents, 
+--        AVG(CASE 
+--              WHEN s.LiteracyLevel = 'Basic' THEN 1 
+--              WHEN s.LiteracyLevel = 'Intermediate' THEN 2 
+--              WHEN s.LiteracyLevel = 'Advanced' THEN 3 
+--              ELSE 0 
+--            END) AS AverageLiteracyScore
+-- FROM Students s
+-- JOIN Regions r ON s.RegionID = r.RegionID
+-- GROUP BY r.Name
+-- ORDER BY AverageLiteracyScore DESC
+-- LIMIT 0, 1000;
+
+
+Corrolation between resources available and literacy:
+
+SELECT sc.Name AS School, 
+       sc.ResourcesAvailable, 
+       sc.AverageLiteracyScore
+FROM Schools sc
+ORDER BY sc.AverageLiteracyScore DESC
+LIMIT 0, 1000;
+
+
+Teacher Qualification and literacy levels:
+
+SELECT t.Name AS Teacher, 
+       t.Qualification, 
+       sc.Name AS School, 
+       sc.AverageLiteracyScore
+FROM Teachers t
+JOIN Schools sc ON t.SchoolID = sc.SchoolID
+ORDER BY sc.AverageLiteracyScore DESC
+LIMIT 0, 1000;
+
+
+Effectiveness and Educational programs:
+
+SELECT p.Name AS Program, 
+       p.EffectivenessScore, 
+       sc.Name AS School, 
+       sc.AverageLiteracyScore
+FROM Programs p
+JOIN Schools sc ON p.SchoolID = sc.SchoolID
+ORDER BY p.EffectivenessScore DESC
+LIMIT 0, 1000;
+
+
+
+Identifying Underperforming regions:
+
+SELECT r.Name AS Region, 
+       AVG(sc.AverageLiteracyScore) AS RegionAverageLiteracyScore 
+FROM Schools sc
+JOIN Regions r ON sc.RegionID = r.RegionID
+GROUP BY r.Name
+ORDER BY RegionAverageLiteracyScore ASC
+LIMIT 0, 1000;
+
+
+Analysing Literacy Level by Region:
+
+SELECT r.Name AS Region, 
+       COUNT(s.StudentID) AS NumberOfStudents, 
+       AVG(CASE WHEN s.LiteracyLevel = 'Basic' THEN 1 
+                WHEN s.LiteracyLevel = 'Intermediate' THEN 2 
+                WHEN s.LiteracyLevel = 'Advanced' THEN 3 
+                ELSE 0 END) AS AverageLiteracyScore
+FROM Students s
+JOIN Regions r ON s.RegionID = r.RegionID
+GROUP BY r.Name
+ORDER BY AverageLiteracyScore DESC;
+
+
